@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,9 @@ public class AuthenticationController {
     private UserRepository repository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO data) {
         try {
@@ -45,9 +49,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO data){
-        if(this.repository.findBycpf(data.cpf()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe em nossa base de dados.");
+        if(this.repository.findBycpf(data.cpf()).isPresent()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe em nossa base de dados.");
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        String encryptedPassword = passwordEncoder.encode(data.password());
         User newUser = new User(data.cpf(), data.name(), data.email(), data.registration(), encryptedPassword);
 
         this.repository.save(newUser);
