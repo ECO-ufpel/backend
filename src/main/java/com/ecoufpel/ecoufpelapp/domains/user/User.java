@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,18 +14,26 @@ import java.util.List;
 @Table(name = "users", schema = "users")
 @Entity(name = "users")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 //@Transactional(propagation=Propagation.REQUIRES_NEW)
-public class Users implements UserDetails {
+public class User implements UserDetails {
     @Id
     private String cpf;
     private String name;
     private String email;
     private String registration;
-
+    private String password;
     private UserRole role;
+
+    public User(String cpf, String name, String email, String registration, String password) {
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.registration = registration;
+        this.password = password;
+        this.role = UserRole.USER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,7 +43,7 @@ public class Users implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
@@ -64,9 +71,4 @@ public class Users implements UserDetails {
         return true;
     }
 
-    public void setCpf(String cpf) {this.cpf = cpf;}
-    public void setUsername(String name){ this.name = name;}
-    public void setEmail(String email) {this.email = email;}
-    public void setRegistration(String registration){this.registration = registration;}
-    public void setRole(UserRole role){this.role = role;}
 }
