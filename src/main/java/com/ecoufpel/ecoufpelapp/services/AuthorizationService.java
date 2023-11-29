@@ -14,6 +14,8 @@ public class AuthorizationService implements UserDetailsService {
     UserRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findBycpf(username);
+        var result = repository.findBycpf(username);
+        if (result.isPresent()) return result.get();
+        throw new UsernameNotFoundException("Username " + username + " not found");
     }
 }

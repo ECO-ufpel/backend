@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -26,10 +27,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if(token != null){
             var cpf = tokenService.validateToken(token);
-            UserDetails user = userRepository.findBycpf(cpf);
-            if(user == null) System.out.println("User not found: cpf:" + cpf);
+            Optional<UserDetails> user = userRepository.findBycpf(cpf);
+            if(user.isEmpty()) {
+                System.out.println("User not found: cpf:" + cpf);
+                return;
+            }
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
