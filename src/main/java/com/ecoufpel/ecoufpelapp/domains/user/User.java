@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Transactional(propagation=Propagation.REQUIRES_NEW)
 public class User implements UserDetails {
     @Id
     private String cpf;
@@ -25,6 +24,7 @@ public class User implements UserDetails {
     private String registration;
     private String password;
     private UserRole role;
+    private boolean enabled;
 
     public User(String cpf, String name, String email, String registration, String password) {
         this.cpf = cpf;
@@ -33,6 +33,7 @@ public class User implements UserDetails {
         this.registration = registration;
         this.password = password;
         this.role = UserRole.USER;
+        this.enabled = true;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 }

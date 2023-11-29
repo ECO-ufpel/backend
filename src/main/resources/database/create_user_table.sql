@@ -1,8 +1,8 @@
--- Database: eco_ufpel_users
+-- Database: eco_ufpel
 
--- DROP DATABASE IF EXISTS eco_ufpel_users;
+-- DROP DATABASE IF EXISTS eco_ufpel;
 
-CREATE DATABASE IF NOT EXISTS eco_ufpel_users
+CREATE DATABASE IF NOT EXISTS eco_ufpel
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -26,33 +26,13 @@ CREATE TABLE IF NOT EXISTS users.users
     name varchar(256) NOT NULL,
     email varchar(128) NOT NULL,
     registration varchar(10) UNIQUE NOT NULL,
-    password varchar(20) NOT NULL,
+    password varchar(128) NOT NULL,
     role smallint NOT NULL DEFAULT 0,   -- 0 is user, 1 is admin
+    enabled boolean NOT NULL DEFAULT true,
     CONSTRAINT users_pkey PRIMARY  KEY (cpf)
 )
 
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS users.users
-    OWNER to postgres;
-
--- Table: users.password
-
--- DROP TABLE IF EXISTS users.password;
-
-CREATE TABLE IF NOT EXISTS users.password
-(
-    cpf varchar(11) NOT NULL,
-    hash varchar(512) NOT NULL,
-    salt varchar(128) NOT NULL,
-    CONSTRAINT password_pkey PRIMARY KEY (cpf),
-    CONSTRAINT foregin_key_cpf FOREIGN KEY (cpf)
-        REFERENCES users.users (cpf) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS users.password
     OWNER to postgres;
