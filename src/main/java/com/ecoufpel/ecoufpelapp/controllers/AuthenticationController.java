@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("auth")
 public class AuthenticationController {
@@ -34,8 +37,12 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO data) {
+        var sanitized_cpf = sanitizeCpf(data.cpf());
+        if (sanitized_cpf.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF not valid, 11 digits necessary");
+        }
         try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
+            var usernamePassword = new UsernamePasswordAuthenticationToken(sanitized_cpf.get(), data.password());
 
             var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -49,14 +56,33 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO data){
-        if(this.repository.findBycpf(data.cpf()).isPresent()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe em nossa base de dados.");
+        var sanitized_cpf = sanitizeCpf(data.cpf());
+        if (sanitized_cpf.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF not valid, 11 digits necessary");
+        }
+        if(this.repository.findByCpfOrRegistration(sanitized_cpf.get(), data.registration()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe em nossa base de dados.");
+        }
 
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(data.cpf(), data.name(), data.email(), data.registration(), encryptedPassword);
+        User newUser = new User(sanitized_cpf.get(), data.name(), data.email(), data.registration(), encryptedPassword);
 
         this.repository.save(newUser);
 
         return ResponseEntity.status(HttpStatus.OK).body("Usuário criado com sucesso em nossa base de dados.");
+    }
+
+    /**
+     * This function only validate if cpf has digits and has 11 digits
+     * it does not check if is a valid cpf with verification digit
+     * @param cpf - the string to verify
+     * @return Optional - an option containing a stripped string with only digits or None
+     */
+    private Optional<String> sanitizeCpf(String cpf) {
+        var result = cpf.replaceAll("\\D", "");
+
+        if (result.length() != 11) { return Optional.empty(); }
+        return Optional.of(result);
     }
 
 }
