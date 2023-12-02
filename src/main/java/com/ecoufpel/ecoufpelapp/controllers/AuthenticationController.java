@@ -12,15 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @RestController
@@ -78,7 +75,7 @@ public class AuthenticationController {
      * @param cpf - the string to verify
      * @return Optional - an option containing a stripped string with only digits or None
      */
-    private Optional<String> sanitizeCpf(String cpf) {
+    public Optional<String> sanitizeCpf(String cpf) {
         var result = cpf.replaceAll("\\D", "");
 
         if (result.length() != 11) { return Optional.empty(); }
