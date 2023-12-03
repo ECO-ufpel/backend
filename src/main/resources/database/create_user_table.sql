@@ -2,7 +2,7 @@
 
 -- DROP DATABASE IF EXISTS eco_ufpel;
 
-CREATE DATABASE IF NOT EXISTS eco_ufpel
+CREATE DATABASE eco_ufpel
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
