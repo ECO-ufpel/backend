@@ -47,7 +47,8 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (AuthenticationException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+            System.err.println(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não encontrado.");
         }
     }
 
