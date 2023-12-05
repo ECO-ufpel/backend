@@ -9,11 +9,12 @@ on:
 permissions:
   contents: read
 
+environment: Database_test_settings
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: Database_test_settings
 
     steps:
     - uses: actions/checkout@v3
