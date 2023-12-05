@@ -23,6 +23,12 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
     - name: build with gradle
+      env:
+        TEST_ECO_UFPEL_DATABASE_IP: ${{ vars.TEST_ECO_UFPEL_DATABASE_IP }}
+        TEST_ECO_UFPEL_DATABASE_PORT: ${{ vars.TEST_ECO_UFPEL_DATABASE_PORT }}
+        TEST_ECO_UFPEL_DATABASE_NAME: ${{ vars.TEST_ECO_UFPEL_DATABASE_NAME }}
+        TEST_ECO_UFPEL_DATABASE_USER: ${{ vars.TEST_ECO_UFPEL_DATABASE_USER }}
+        TEST_ECO_UFPEL_DATABASE_PASSWORD: ${{ vars.TEST_ECO_UFPEL_DATABASE_PASSWORD }}
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
