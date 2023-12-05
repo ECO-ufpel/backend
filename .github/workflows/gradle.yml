@@ -1,8 +1,8 @@
-name: build
+name: build, test and deploy
 
 on:
   push:
-    branches: [ "main" , "ci-cd"]
+    branches: [ "main" , "ci-cd" ]
   pull_request:
     branches: [ "main" ]
 
@@ -13,6 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: Database_test_settings
 
     steps:
     - uses: actions/checkout@v3
@@ -24,7 +25,7 @@ jobs:
     - name: build with gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
-        arguments: build --exclude-task=test
+        arguments: build
 
 
     - name: build & push docker image
