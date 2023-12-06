@@ -2,8 +2,6 @@ name: build, test and deploy
 
 on:
   push:
-    branches: [ "main" , "ci-cd" ]
-  pull_request:
     branches: [ "main" ]
 
 permissions:
