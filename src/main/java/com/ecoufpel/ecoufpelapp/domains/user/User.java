@@ -22,15 +22,17 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String registration;
+    private String image;
     private String password;
     private UserRole role;
     private boolean enabled;
 
-    public User(String cpf, String name, String email, String registration, String password) {
+    public User(String cpf, String name, String email, String registration, String image, String password) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.registration = registration;
+        this.image = image;
         this.password = password;
         this.role = UserRole.USER;
         this.enabled = true;

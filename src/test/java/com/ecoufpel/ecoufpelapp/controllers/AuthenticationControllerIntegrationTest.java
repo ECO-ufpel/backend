@@ -69,6 +69,7 @@ public class AuthenticationControllerIntegrationTest {
                 "Alfred",
                 "alfred@wayne.corp",
                 "00030",
+                "https://i.pravatar.cc/150?u=a042581f4e29026704ds",
                 passwordEncoder.encode("Master Bruce!")));
         assert userRepository.findAll().size() == number_of_users_before + 1;
     }
@@ -151,6 +152,7 @@ public class AuthenticationControllerIntegrationTest {
                         "joao",
                         "joao@gmail.com",
                         "123456",
+                        "https://i.pravatar.cc/150?u=a042581f4e29026704ds",
                         UserRole.USER,
                         "12346")));
         MvcResult result = mvc.perform(request).andExpect(status().isOk()).andReturn();
@@ -170,6 +172,7 @@ public class AuthenticationControllerIntegrationTest {
                                         "joao",
                                         "joao@gmail.com",
                                         "123456",
+                                        "https://i.pravatar.cc/150?u=a042581f4e29026704ds",
                                         UserRole.USER,
                                         "12346")));
         MvcResult result = mvc.perform(request).andExpect(status().isBadRequest()).andReturn();
