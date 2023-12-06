@@ -27,25 +27,20 @@ public class MeController {
         if(authentication.isAuthenticated()){
             Object principal = authentication.getPrincipal();
 
-            Optional<UserDetails> userDetailsOptional = (Optional<UserDetails>) principal;
+            Optional<User> userOptional = (Optional<User>) principal;
 
-            UserDetails userDetails = userDetailsOptional.get();
-            MeResponseDTO response = new MeResponseDTO(
-                    ((User) userDetails).getCpf(),
-                    ((User) userDetails).getName(),
-                    ((User) userDetails).getEmail(),
-                    ((User) userDetails).getRegistration(),
-                    ((User) userDetails).getImage());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                MeResponseDTO response = new MeResponseDTO(
+                        user.getCpf(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRegistration(),
+                        user.getImage());
 
-            return ResponseEntity.status(200).body(response);
+                return ResponseEntity.status(200).body(response);
+            }
         }
         return ResponseEntity.status(403).body("Usuário não autenticado.");
-    }
-
-    public Optional<String> sanitizeCpf(String cpf) {
-        var result = cpf.replaceAll("\\D", "");
-
-        if (result.length() != 11) { return Optional.empty(); }
-        return Optional.of(result);
     }
 }
