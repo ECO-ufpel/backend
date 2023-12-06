@@ -29,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var cpf = tokenService.validateToken(token);
             Optional<UserDetails> user = userRepository.findBycpf(cpf);
             if(user.isEmpty()) {
-                System.out.println("User not found: cpf:" + cpf);
+                response.setStatus(403);
                 return;
             }
 
@@ -39,7 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String recoverToken(HttpServletRequest request){
+    public String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
         if(authHeader == null) return null;
         return authHeader.replace("Bearer ", "");

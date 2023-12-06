@@ -14,7 +14,7 @@ CREATE DATABASE eco_ufpel
     IS_TEMPLATE = False;
 
 CREATE SCHEMA users
-    AUTHORIZATION postgres;
+    AUTHORIZATION admin;
 
 -- Table: users.users
 
@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS users.users
     name varchar(256) NOT NULL,
     email varchar(128) NOT NULL,
     registration varchar(10) UNIQUE NOT NULL,
+    image varchar(256) NOT NULL,
     password varchar(128) NOT NULL,
     role smallint NOT NULL DEFAULT 0,   -- 0 is user, 1 is admin
     enabled boolean NOT NULL DEFAULT true,
@@ -35,4 +36,4 @@ CREATE TABLE IF NOT EXISTS users.users
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS users.users
-    OWNER to postgres;
+    OWNER to admin;
