@@ -24,43 +24,23 @@ public class MeController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Object principal = authentication.getPrincipal();
+        if(authentication.isAuthenticated()){
+            Object principal = authentication.getPrincipal();
 
-        Optional<UserDetails> userDetailsOptional = (Optional<UserDetails>) principal;
+            Optional<User> userOptional = (Optional<User>) principal;
 
-        String cpf = "";
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                MeResponseDTO response = new MeResponseDTO(
+                        user.getCpf(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRegistration(),
+                        user.getImage());
 
-        if (userDetailsOptional.isPresent()) {
-            UserDetails userDetails = userDetailsOptional.get();
-            cpf = userDetails.getUsername();
+                return ResponseEntity.status(200).body(response);
+            }
         }
-
-        var sanitized_cpf = sanitizeCpf(cpf);
-        if (sanitized_cpf.isEmpty()) {
-            return ResponseEntity.status(400).body("CPF not valid, 11 digits necessary");
-        }
-        Optional<UserDetails> user = this.repository.findBycpf(sanitized_cpf.get());
-
-        if(user.isEmpty()) {
-            return ResponseEntity.status(404).body("User not found");
-        }
-
-        UserDetails userDetails = user.get();
-
-        MeResponseDTO response = new MeResponseDTO(
-                ((User) userDetails).getCpf(),
-                ((User) userDetails).getName(),
-                ((User) userDetails).getEmail(),
-                ((User) userDetails).getRegistration(),
-                ((User) userDetails).getImage());
-
-        return ResponseEntity.status(200).body(response);
-    }
-
-    public Optional<String> sanitizeCpf(String cpf) {
-        var result = cpf.replaceAll("\\D", "");
-
-        if (result.length() != 11) { return Optional.empty(); }
-        return Optional.of(result);
+        return ResponseEntity.status(403).body("Usuário não autenticado.");
     }
 }
