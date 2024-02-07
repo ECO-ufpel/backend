@@ -27,14 +27,14 @@ public class User implements UserDetails {
     private UserRole role;
     private boolean enabled;
 
-    public User(String cpf, String name, String email, String registration, String image, String password) {
+    public User(String cpf, String name, String email, String registration, String image, UserRole role, String password) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.registration = registration;
         this.image = image;
         this.password = password;
-        this.role = UserRole.USER;
+        this.role = role;
         this.enabled = true;
     }
 
