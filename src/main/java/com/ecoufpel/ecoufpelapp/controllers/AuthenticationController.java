@@ -63,7 +63,7 @@ public class AuthenticationController {
         }
 
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(sanitized_cpf.get(), data.name(), data.email(), data.registration(), data.image(), encryptedPassword);
+        User newUser = new User(sanitized_cpf.get(), data.name(), data.email(), data.registration(), data.image(), data.role(), encryptedPassword);
 
         this.repository.save(newUser);
 

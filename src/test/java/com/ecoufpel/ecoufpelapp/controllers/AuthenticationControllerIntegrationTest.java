@@ -70,6 +70,7 @@ public class AuthenticationControllerIntegrationTest {
                 "alfred@wayne.corp",
                 "00030",
                 "https://i.pravatar.cc/150?u=a042581f4e29026704ds",
+                UserRole.USER,
                 passwordEncoder.encode("Master Bruce!")));
         assert userRepository.findAll().size() == number_of_users_before + 1;
     }
