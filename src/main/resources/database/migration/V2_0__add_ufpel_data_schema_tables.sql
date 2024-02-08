@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS ufpel_data.user_in_course (
     CONSTRAINT user_cpf_fkey FOREIGN KEY (user_cpf) REFERENCES users.users(cpf)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT course_id FOREIGN KEY (course_id) REFERENCES ufpel_data.courses(id)
+    CONSTRAINT course_id_fkey FOREIGN KEY (course_id) REFERENCES ufpel_data.courses(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS ufpel_data.course_in_room (
     course_id varchar(8) NOT NULL,
     classroom_id varchar(3) NOT NULL,
     interval SMALLINT NOT NULL,
-    CONSTRAINT course_in_room PRIMARY KEY (classroom_id, interval),
+    CONSTRAINT course_in_room_pkey PRIMARY KEY (classroom_id, interval),
     CONSTRAINT interval_fkey FOREIGN KEY (interval) REFERENCES ufpel_data.time_intervals(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
