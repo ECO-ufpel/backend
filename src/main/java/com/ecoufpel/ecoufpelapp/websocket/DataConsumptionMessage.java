@@ -1,9 +1,5 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
-import com.ecoufpel.ecoufpelapp.domains.sensor.DataDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ecoufpel.ecoufpelapp.domains.sensor.DataConsumptionDTO;
 
-public record DataConsumptionMessage(DataDTO data) {}
+public record DataConsumptionMessage(DataConsumptionDTO data) {}

@@ -1,20 +1,12 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
-import com.ecoufpel.ecoufpelapp.controllers.SensorDataController;
-import com.ecoufpel.ecoufpelapp.domains.sensor.DataDTO;
+import com.ecoufpel.ecoufpelapp.domains.sensor.DataConsumptionDTO;
 import com.ecoufpel.ecoufpelapp.domains.user.User;
 import com.ecoufpel.ecoufpelapp.repositories.UserRepository;
-import com.ecoufpel.ecoufpelapp.services.InsertDataService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.ecoufpel.ecoufpelapp.services.InsertDataConsuptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
@@ -26,11 +18,11 @@ import java.util.Optional;
 import java.util.concurrent.Flow;
 
 @Service
-public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
+public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDTO> {
     private HashMap<String, List<WebSocketSession>> users_connected = new HashMap<>();
 
     @Autowired
-    private InsertDataService insertDataService = new InsertDataService();
+    private InsertDataConsuptionService insertDataService = new InsertDataConsuptionService();
 
     @Autowired
     private UserRepository userRepository;
@@ -49,8 +41,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
         var user = user_option.get();
 
         // Make a query to get the room ID
-        // For now we will use the user's CPF as the room ID
-        var room_id = user.getCpf();
+        var room_id = "331";
 
         System.out.println("Name: " + user.getName() + " added to list");
 
@@ -91,8 +82,8 @@ public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
     }
 
     @Override
-    public void onNext(DataDTO item) {
-        List<WebSocketSession> room_id_list = users_connected.get(item.room_id().toString());
+    public void onNext(DataConsumptionDTO item) {
+        List<WebSocketSession> room_id_list = users_connected.get(item.classroom_id().toString());
 
         if (room_id_list == null) {
             return;
