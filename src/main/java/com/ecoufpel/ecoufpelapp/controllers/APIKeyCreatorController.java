@@ -54,5 +54,4 @@ public class APIKeyCreatorController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("API Key not found");
     }
-
 }

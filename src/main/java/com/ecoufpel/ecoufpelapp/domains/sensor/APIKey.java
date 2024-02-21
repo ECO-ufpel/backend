@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table(name = "api_keys", schema = "sensors")
+@Table(name = "api_keys", schema = "sensor_data")
 @Getter
 @Setter
 public class APIKey {
@@ -21,5 +21,4 @@ public class APIKey {
     private Date expiration;
     private boolean active = true;
     private Timestamp lastUsed = null;
-
 }
