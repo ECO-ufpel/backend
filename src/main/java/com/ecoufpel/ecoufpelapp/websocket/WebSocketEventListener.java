@@ -35,6 +35,10 @@ public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
     @Autowired
     private UserRepository userRepository;
 
+    public WebSocketEventListener() {
+        insertDataService.subscribe(this);
+    }
+
     public void register_user(Principal principal, WebSocketSession socket) {
 
         Optional<User> user_option = (Optional<User>) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -59,8 +63,6 @@ public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
         } else {
             list.add(socket);
         }
-
-        insertDataService.subscribe(this);
     }
 
     public void remove_user(Principal principal, WebSocketSession socket) {
@@ -98,7 +100,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataDTO> {
 
         room_id_list.forEach((socket) -> {
             try {
-                socket.sendMessage(new org.springframework.web.socket.TextMessage(item.toString()));
+                socket.sendMessage(item.toTextMessage());
             } catch (Exception e) {
                 e.printStackTrace();
             }
