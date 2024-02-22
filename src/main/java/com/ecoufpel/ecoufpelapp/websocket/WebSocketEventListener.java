@@ -1,9 +1,14 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
 import com.ecoufpel.ecoufpelapp.domains.sensor.DataConsumptionDTO;
+import com.ecoufpel.ecoufpelapp.domains.ufpel_data.Classrooms;
 import com.ecoufpel.ecoufpelapp.domains.user.User;
 import com.ecoufpel.ecoufpelapp.repositories.UserRepository;
 import com.ecoufpel.ecoufpelapp.services.InsertDataConsuptionService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.Flow;
 
 @Service
+@Transactional
 public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDTO> {
     private HashMap<String, List<WebSocketSession>> users_connected = new HashMap<>();
 
@@ -27,10 +33,15 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    @PersistenceContext(name = "ufpel_data")
+    private EntityManager entityManager;
+
     public WebSocketEventListener() {
         insertDataService.subscribe(this);
     }
 
+    @Transactional
     public void register_user(Principal principal, WebSocketSession socket) {
 
         Optional<User> user_option = (Optional<User>) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -40,8 +51,18 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
 
         var user = user_option.get();
 
-        // Make a query to get the room ID
-        var room_id = "331";
+        TypedQuery<Classrooms> query = entityManager.createQuery("""
+                SELECT classroom_id FROM ufpel_data.classrooms AS ca
+                JOIN ufpel_data.course_in_room AS cir ON cir.classroom_id = ca.id
+                JOIN ufpel_data.time_intervals AS interval ON interval.id = cir.interval
+                JOIN ufpel_data.user_in_course AS uic ON uic.course_id = cir.course_id
+                WHERE user_cpf = :cpf AND
+                LOCALTIME(0) BETWEEN start_time AND end_time
+                """,  Classrooms.class).setParameter("cpf", user.getCpf());
+
+        List<Classrooms> resultList = query.getResultList();
+
+        var room_id = resultList.getFirst().getId();
 
         System.out.println("Name: " + user.getName() + " added to list");
 
