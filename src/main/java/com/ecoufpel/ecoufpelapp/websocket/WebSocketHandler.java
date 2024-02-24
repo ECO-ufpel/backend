@@ -1,6 +1,9 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -12,16 +15,18 @@ import java.util.HashMap;
 
 @Service
 public class WebSocketHandler extends TextWebSocketHandler {
-//    HashMap<Principal, WebSocketSession> sessions = new HashMap<>(); // user_cpf, session
+    private final WebSocketEventListener webSocketEventListener;
 
-    private WebSocketEventListener webSocketEventListener = new WebSocketEventListener();
+    @Autowired
+    public WebSocketHandler(WebSocketEventListener webSocketEventListener) {
+        this.webSocketEventListener = webSocketEventListener;
+    }
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         System.out.println("Received message: " + message.getPayload());
         session.sendMessage(new TextMessage("Polo!"));
     }
-
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
