@@ -17,8 +17,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("sensor")
 public class SensorDataController {
+    private final InsertDataConsuptionService insertDataService;
+
     @Autowired
-    InsertDataConsuptionService insertDataService;
+    public SensorDataController(InsertDataConsuptionService insertDataService) {
+        this.insertDataService = insertDataService;
+    }
 
     @PostMapping("/insert")
     public ResponseEntity insertDataWithParams(@RequestParam("room_id") String room_id, @RequestParam("time") String time, @RequestParam("consumption") double consumption, @RequestParam("API-Key") String key) {
