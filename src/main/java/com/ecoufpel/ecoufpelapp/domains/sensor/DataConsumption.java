@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataComsumption {
+public class DataConsumption {
     @EmbeddedId
-    private DataComsumptionID id;
+    private DataConsumptionID id;
     private double consumption;
 }

@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.sql.Timestamp;
 
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataComsumptionID implements Serializable {
+public class DataConsumptionID implements Serializable {
     private String classroom_id;
     private Timestamp date_time;
 
