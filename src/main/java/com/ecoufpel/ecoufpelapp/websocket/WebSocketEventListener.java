@@ -7,6 +7,7 @@ import com.ecoufpel.ecoufpelapp.repositories.*;
 import com.ecoufpel.ecoufpelapp.services.InsertDataConsuptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -31,14 +32,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         insertDataService.subscribe(this);
     }
 
-    public void register_user(Principal principal, WebSocketSession socket) {
-        Optional<User> user_option = (Optional<User>) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        if (user_option.isEmpty()) {
-            return;
-        }
-
-        var user = user_option.get();
-
+    public void register_user(User user, WebSocketSession socket) {
         var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
 
         System.out.println("Name: " + user.getName() + " added to list");
@@ -54,12 +48,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         }
     }
 
-    public void remove_user(Principal principal, WebSocketSession socket) {
-        User user = (User) principal;
-        if (user == null) {
-            return;
-        }
-
+    public void remove_user(User user, WebSocketSession socket) {
         var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
 
         var list = usersConnected.get(room_id);
