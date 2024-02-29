@@ -27,7 +27,7 @@ public class InsertDataConsuptionService implements Flow.Publisher<DataConsumpti
 
     public ResponseEntity insertData(DataConsumptionDTO data, UUID key) {
         if (checkAPIService.checkAPIKey(key)) {
-            var sensorData = new DataConsumption(new DataConsumptionID(data.classroom_id(), data.date_time()), data.consumption());
+            var sensorData = new DataConsumption(new DataConsumptionID(data.classroom_id(), data.dateTime()), data.consumption());
             subscribers.forEach(subscriber -> subscriber.onNext(data));
             sensorDataRepository.save(sensorData);
             return ResponseEntity.status(HttpStatus.OK).body("Data inserted");

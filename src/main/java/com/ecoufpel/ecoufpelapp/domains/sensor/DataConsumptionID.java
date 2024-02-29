@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataConsumptionID implements Serializable {
-    private String classroom_id;
-    private Timestamp date_time;
+    private String classroomId;
+    private Timestamp dateTime;
 
     @Override
     public boolean equals(Object obj) {
