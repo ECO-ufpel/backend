@@ -29,11 +29,10 @@ public class SensorDataController {
     }
 
     @GetMapping("/data/history")
-    public ResponseEntity getHistoryData(@RequestParam("room_id") String room_id, @RequestParam("start_time") String start_time, @RequestParam("end_time") String end_time, @RequestParam("API-Key") String key) {
+    public ResponseEntity getHistoryData(@RequestParam("room_id") String room_id, @RequestParam("start_time") String start_time, @RequestParam("end_time") String end_time) {
         Timestamp start = Timestamp.valueOf(LocalDateTime.parse(start_time, DateTimeFormatter.ISO_DATE_TIME));
         Timestamp end = Timestamp.valueOf(LocalDateTime.parse(end_time, DateTimeFormatter.ISO_DATE_TIME));
-        UUID key_uuid = UUID.fromString(key);
-        return insertDataService.getHistoryData(room_id, start, end, key_uuid);
+        return insertDataService.getHistoryData(room_id, start, end);
     }
 
 }
