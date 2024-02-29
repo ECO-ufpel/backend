@@ -4,10 +4,7 @@ import com.ecoufpel.ecoufpelapp.domains.sensor.DataConsumptionDTO;
 import com.ecoufpel.ecoufpelapp.services.InsertDataConsuptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -29,6 +26,13 @@ public class SensorDataController {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME));
         UUID key_uuid = UUID.fromString(key);
         return insertDataService.insertData(new DataConsumptionDTO(room_id, timestamp, consumption), key_uuid);
+    }
+
+    @GetMapping("/data/history")
+    public ResponseEntity getHistoryData(@RequestParam("room_id") String room_id, @RequestParam("start_time") String start_time, @RequestParam("end_time") String end_time) {
+        Timestamp start = Timestamp.valueOf(LocalDateTime.parse(start_time, DateTimeFormatter.ISO_DATE_TIME));
+        Timestamp end = Timestamp.valueOf(LocalDateTime.parse(end_time, DateTimeFormatter.ISO_DATE_TIME));
+        return insertDataService.getHistoryData(room_id, start, end);
     }
 
 }
