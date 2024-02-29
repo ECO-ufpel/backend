@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,15 @@ public class InsertDataConsuptionService implements Flow.Publisher<DataConsumpti
             subscribers.forEach(subscriber -> subscriber.onNext(data));
             sensorDataRepository.save(sensorData);
             return ResponseEntity.status(HttpStatus.OK).body("Data inserted");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("API Key not valid");
+    }
+
+    public ResponseEntity getHistoryData(String room_id, Timestamp start, Timestamp end, UUID key) {
+        if (checkAPIService.checkAPIKey(key)) {
+            List<DailyAverageConsumption> data = sensorDataRepository.getDailyAverageConsumption(room_id, start, end);
+            data.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+            return ResponseEntity.status(HttpStatus.OK).body(data);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("API Key not valid");
     }
