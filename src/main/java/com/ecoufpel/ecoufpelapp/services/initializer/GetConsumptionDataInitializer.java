@@ -13,7 +13,7 @@ public class GetConsumptionDataInitializer implements ApplicationRunner{
     private final GetConsumptionDataService getConsumptionDataService;
 
     @Autowired
-    public GetConsumptionDataInitializer(GetConsumptionDataService getConsumptionDataService, WebSocketEventListener webSocketEventListener){
+    public GetConsumptionDataInitializer(GetConsumptionDataService getConsumptionDataService){
         this.getConsumptionDataService = getConsumptionDataService;
     }
 
