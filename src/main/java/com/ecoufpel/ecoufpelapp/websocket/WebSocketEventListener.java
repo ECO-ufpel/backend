@@ -32,11 +32,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         insertDataService.subscribe(this);
     }
 
-    public void register_user(User user, WebSocketSession socket) {
-        var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        System.out.println("Name: " + user.getName() + " added to list");
-
+    public void register_user(String room_id, WebSocketSession socket) {
         var list = usersConnected.get(room_id);
 
         if (list == null) {
@@ -48,9 +44,19 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         }
     }
 
+    public void register_user(User user, WebSocketSession socket) {
+        var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        this.register_user(room_id, socket);
+    }
+
     public void remove_user(User user, WebSocketSession socket) {
         var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
 
+        this.register_user(room_id, socket);
+    }
+
+    public void remove_user(String room_id, WebSocketSession socket) {
         var list = usersConnected.get(room_id);
 
         if (list != null) {
@@ -59,6 +65,12 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         else {
             usersConnected.remove(room_id, socket);
         }
+    }
+
+    public void remove_user(WebSocketSession socket) {
+        usersConnected.forEach((room_id, list) -> {
+            list.remove(socket);
+        });
     }
 
     @Override
