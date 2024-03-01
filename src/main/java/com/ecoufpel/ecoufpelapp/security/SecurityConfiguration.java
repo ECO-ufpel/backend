@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "sensor/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "sensor/insert").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/ws").permitAll()
                         .anyRequest().authenticated()
