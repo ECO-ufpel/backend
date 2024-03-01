@@ -49,8 +49,9 @@ public class GetConsumptionDataService {
     }
 
     private void sendConsumptionDataToWS() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         dataConsumptionRepository
-            .findById_DateTimeBetween(lastTimeStampChecked, new Timestamp(System.currentTimeMillis()))
+            .findById_DateTimeBetween(lastTimeStampChecked, now)
             .ifPresent(dataConsumptionList -> {
                 dataConsumptionList.forEach(dataConsumptionEntry -> {
                     webSocketEventListener.onNext(new DataConsumptionDTO(
@@ -61,5 +62,6 @@ public class GetConsumptionDataService {
                     );
                 });
             });
+        lastTimeStampChecked = now;
     }
 }
