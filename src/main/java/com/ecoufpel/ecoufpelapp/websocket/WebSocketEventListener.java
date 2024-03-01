@@ -68,7 +68,7 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
 
     @Override
     public void onNext(DataConsumptionDTO item) {
-        List<WebSocketSession> room_id_list = usersConnected.get(item.classroom_id());
+        List<WebSocketSession> room_id_list = usersConnected.get(item.classroomId());
 
         if (room_id_list == null) {
             return;
