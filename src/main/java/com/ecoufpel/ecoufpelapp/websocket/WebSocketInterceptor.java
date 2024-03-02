@@ -1,14 +1,11 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
 import com.ecoufpel.ecoufpelapp.repositories.UserRepository;
-import com.ecoufpel.ecoufpelapp.security.SecurityFilter;
 import com.ecoufpel.ecoufpelapp.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
@@ -34,6 +31,7 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
         if (queryURI == null) {
             return false;
         }
+
         HashMap<String, String> queryMap = parseQueryString(queryURI);
         String token = queryMap.get("token");
         if (token == null) {
