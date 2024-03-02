@@ -1,9 +1,6 @@
 package com.ecoufpel.ecoufpelapp.websocket;
 
-import com.ecoufpel.ecoufpelapp.repositories.ClassroomsRepository;
-import com.ecoufpel.ecoufpelapp.services.InsertDataConsuptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

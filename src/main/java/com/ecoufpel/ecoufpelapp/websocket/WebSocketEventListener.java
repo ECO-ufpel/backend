@@ -21,14 +21,8 @@ import java.util.concurrent.Flow;
 public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDTO> {
     private final HashMap<String, List<WebSocketSession>> usersConnected = new HashMap<>();
 
-    private final InsertDataConsuptionService insertDataService;
-
-    private final ClassroomsRepository classroomsRepository;
-
     @Autowired
-    public WebSocketEventListener(InsertDataConsuptionService insertDataService, ClassroomsRepository classroomsRepository) {
-        this.insertDataService = insertDataService;
-        this.classroomsRepository = classroomsRepository;
+    public WebSocketEventListener(InsertDataConsuptionService insertDataService) {
         insertDataService.subscribe(this);
     }
 
@@ -42,18 +36,6 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
         } else {
             list.add(socket);
         }
-    }
-
-    public void register_user(User user, WebSocketSession socket) {
-        var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        this.register_user(room_id, socket);
-    }
-
-    public void remove_user(User user, WebSocketSession socket) {
-        var room_id = searchClassroomRepository(user.getCpf()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        this.register_user(room_id, socket);
     }
 
     public void remove_user(String room_id, WebSocketSession socket) {
@@ -103,10 +85,5 @@ public class WebSocketEventListener implements Flow.Subscriber<DataConsumptionDT
     @Override
     public void onComplete() {
         System.out.println("Completed");
-    }
-
-    private Optional<String> searchClassroomRepository(String cpf) {
-        var classroom = classroomsRepository.findByUserCpf(cpf);
-        return classroom.map(Classrooms::getId);
     }
 }
