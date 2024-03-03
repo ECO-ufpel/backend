@@ -73,11 +73,14 @@ public class GetActivityChangeService {
         }
     }
 
-    public void subscribe_user(String cpf, WebSocketSession socket) {
+    public void register_user(String cpf, WebSocketSession socket) {
         if (usersConnected.containsKey(cpf)) {
             var pair = usersConnected.get(cpf);
             var list = pair.getFirst();
             list.add(socket);
+            var timer = pair.getSecond();
+            timer.cancel();
+            timer.schedule(new MyTask(cpf), 0);
         }
         else {
             var list = new ArrayList<WebSocketSession>();
@@ -86,5 +89,12 @@ public class GetActivityChangeService {
             usersConnected.put(cpf, Pair.of(list, timer));
             timer.schedule(new MyTask(cpf), 0);
         }
+    }
+
+    public void remove_user(WebSocketSession socket) {
+        usersConnected.forEach((cpf, pair) -> {
+            var list = pair.getFirst();
+            list.remove(socket);
+        });
     }
 }
