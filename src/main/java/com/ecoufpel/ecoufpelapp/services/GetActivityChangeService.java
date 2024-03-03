@@ -78,9 +78,7 @@ public class GetActivityChangeService {
             var pair = usersConnected.get(cpf);
             var list = pair.getFirst();
             list.add(socket);
-            var timer = pair.getSecond();
-            timer.cancel();
-            timer.schedule(new MyTask(cpf), 0);
+            send_activity_to_user(cpf, socket);
         }
         else {
             var list = new ArrayList<WebSocketSession>();
@@ -96,5 +94,20 @@ public class GetActivityChangeService {
             var list = pair.getFirst();
             list.remove(socket);
         });
+    }
+
+    public void send_activity_to_user(String cpf, WebSocketSession socket) {
+        var currentActivity = coursesRepository.findCurrentCourseByUserCpf(cpf);
+        var message = new CourseChangeDTO(null, null, null, null);
+        if (currentActivity.isPresent()) {
+            message = currentActivity.get();
+        }
+        CourseChangeDTO finalMessage = message;
+
+        try {
+            socket.sendMessage(finalMessage.toTextMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
