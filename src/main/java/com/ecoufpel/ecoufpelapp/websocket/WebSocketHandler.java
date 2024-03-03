@@ -58,13 +58,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        getActivityChangeService.subscribe_user(user.getCpf(), session);
+        getActivityChangeService.register_user(user.getCpf(), session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
         webSocketEventListener.remove_user(session);
         getExpectedConsumptionService.remove_user(session);
+        getActivityChangeService.remove_user(session);
     }
 
 }
