@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,14 @@ public interface DataConsumptionRepository extends JpaRepository<DataConsumption
             @Param("classroomId") String classroomId,
             @Param("start") Timestamp start,
             @Param("end") Timestamp end);
+
+    @Query("""
+        SELECT c 
+        FROM DataConsumption c
+        WHERE c.id.classroomId = :classroomId AND c.id.dateTime BETWEEN :startDateTime  AND :endDateTime
+    """)
+    List<DataConsumption> getLastHourConsumptionByRoomId(
+            @Param("classroomId") String classroomId,
+            @Param("startDateTime") Timestamp startDateTime,
+            @Param("endDateTime") Timestamp endDateTime);
 }
