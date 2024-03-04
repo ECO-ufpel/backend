@@ -1,7 +1,7 @@
 package com.ecoufpel.ecoufpelapp.services;
 
 import com.ecoufpel.ecoufpelapp.domains.sensor.DataConsumption;
-import com.ecoufpel.ecoufpelapp.domains.ufpel_data.ExpectedConsumptionMessageDTO;
+import com.ecoufpel.ecoufpelapp.domains.websocket.ExpectedConsumptionMessageDTO;
 import com.ecoufpel.ecoufpelapp.repositories.DataConsumptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;

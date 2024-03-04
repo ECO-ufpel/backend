@@ -1,7 +1,6 @@
 package com.ecoufpel.ecoufpelapp.repositories;
 
-import com.ecoufpel.ecoufpelapp.domains.ufpel_data.Classrooms;
-import com.ecoufpel.ecoufpelapp.domains.ufpel_data.CourseChangeDTO;
+import com.ecoufpel.ecoufpelapp.domains.websocket.CourseChangeDTO;
 import com.ecoufpel.ecoufpelapp.domains.ufpel_data.Courses;
 import com.ecoufpel.ecoufpelapp.domains.ufpel_data.TimeIntervals;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +22,7 @@ public interface CoursesRepository extends JpaRepository<Courses, String> {
     public Optional<TimeIntervals> findTimeIntervalsByUserCpf(String userCpf);
 
 @Query("""
-    SELECT new com.ecoufpel.ecoufpelapp.domains.ufpel_data.CourseChangeDTO(
+    SELECT new com.ecoufpel.ecoufpelapp.domains.websocket.CourseChangeDTO(
             cour.title AS currentActivity, class.id AS classroomId, cour.id AS courseId, ?1 AS userCpf)
     FROM Classrooms as class
     JOIN CourseInRoom AS cir ON cir.id.classroomId = class.id
