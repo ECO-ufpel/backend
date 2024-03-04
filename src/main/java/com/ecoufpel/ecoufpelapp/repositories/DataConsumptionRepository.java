@@ -17,10 +17,10 @@ public interface DataConsumptionRepository extends JpaRepository<DataConsumption
     Optional<List<DataConsumption>> findById_DateTimeBetween(Timestamp startTimestamp, Timestamp endTimestamp);
     @Query("""
         SELECT new com.ecoufpel.ecoufpelapp.domains.sensor.DailyAverageConsumption(
-            MIN(c.id.dateTime) AS date, AVG(c.consumption) AS avgConsumption)
-        FROM DataConsumption c
-        WHERE c.id.classroomId = :classroomId AND c.id.dateTime BETWEEN :start AND :end
-        GROUP BY DATE(c.id.dateTime)
+            MIN(c.aggregationDate) AS date, AVG(c.avgConsumption) AS avgConsumption)
+        FROM ClassroomDataAggregation c
+        WHERE c.classroomId = :classroomId AND c.aggregationDate BETWEEN :start AND :end
+        GROUP BY DATE(c.aggregationDate)
     """)
     List<DailyAverageConsumption> getDailyAverageConsumption(
             @Param("classroomId") String classroomId,
