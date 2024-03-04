@@ -1,6 +1,6 @@
 package com.ecoufpel.ecoufpelapp.services;
 
-import com.ecoufpel.ecoufpelapp.domains.ufpel_data.CourseChangeDTO;
+import com.ecoufpel.ecoufpelapp.domains.websocket.CourseChangeDTO;
 import com.ecoufpel.ecoufpelapp.repositories.CoursesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
