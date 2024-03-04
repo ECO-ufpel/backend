@@ -1,4 +1,4 @@
-package com.ecoufpel.ecoufpelapp.domains.ufpel_data;
+package com.ecoufpel.ecoufpelapp.domains.websocket;
 
 import org.springframework.web.socket.TextMessage;
 
